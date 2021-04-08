@@ -8,7 +8,7 @@ const walletSchema = new mongoose.Schema(
             required: true 
         },
         network: { type: String, required: true },
-        balance: { type: Number, required: true },
+        balance: { type: String, required: true },
         address: { type: String, required: true },
         label: { type: String, required: true }
     },
