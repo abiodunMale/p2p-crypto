@@ -34,11 +34,13 @@ exports.Login = async (req, res) =>{
         if(user && (await checkPasswordMatch(password, user.password))){
 
             const data = {
-                userDetails: user,
+                emailaddress: user.emailaddress,
+                firstname: user.firstname,
+                lastname: user.lastname,
                 token: generateToken(user._id)
             };
 
-            return res.status(200).json({message:'Logged in Successfully', data: data });
+            return res.status(200).json({message:'Logged in Successfully', user: data });
 
         }
         else{
