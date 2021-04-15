@@ -24,7 +24,7 @@ const Register = (props) => {
                     <div className="card p-3 logincard" style={{width: '30rem'}}>
                         <p className="text-center">Crypto</p>
                         <div className="card-body">
-                            <form onSubmit={registerUser()}>
+                            <form onSubmit={registerUser}>
                                 <div className="row mb-3">
                                     <div className="col-md-6">
                                         <label className="form-label">First Name</label>
@@ -32,7 +32,7 @@ const Register = (props) => {
                                             type="text" 
                                             className="form-control" 
                                             name="firstname"
-                                            onChange={changeInfo()}
+                                            onChange={changeInfo}
                                         />
                                     </div>
                                     <div className="col-md-6">
