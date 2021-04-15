@@ -1,16 +1,21 @@
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import Navbar from './components/navbar';
 import SideMenu from './components/sidemenu';
-import demo from './pages/demo';
+import Auth from './pages/auth';
+import Demo from './pages/demo';
+import Navbar from './components/navbar';
 
-function App() {
+
+const App = () => {
   return (
     <>
     <BrowserRouter>
-      {/* <Navbar/> */}
+    {false ? 
+    <>
       <SideMenu/>
+      <Navbar/>
+    </> : <Auth/>  }
       <Switch>
-        <Route exact path='/demo' component={demo}/>
+        <Route exact path='/demo' component={Demo}/>
       </Switch>
     </BrowserRouter>
     </>
