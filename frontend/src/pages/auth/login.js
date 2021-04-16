@@ -38,7 +38,7 @@ const Login = (props) => {
                 <div className="col" style={{marginTop: 45}}>
                     <img src="/login.png" className="img-fluid"/>
                 </div>
-                <div className="col" style={{marginTop: 120}}>
+                <div className="col" style={{marginTop: 100}}>
                     <div className="card p-3 logincard" style={{width: '30rem'}}>
                         <p className="text-center">Crypto</p>
                         <div className="card-body">
