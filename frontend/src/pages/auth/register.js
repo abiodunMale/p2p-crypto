@@ -5,7 +5,7 @@ const Register = (props) => {
 
     const [userInfo, setUserInfo] = useState({firstname: '', lastname: ''});
     const [submitForm, setSubmitForm] = useState(false);
-    const [formError, setFormError] = useState({validEmail: false, validLname: false, validPassword: false});
+    const [formError, setFormError] = useState({validEmail: false, validFname: false, validLname: false, validPassword: false});
 
 
     const changeInfo = (e) => {
@@ -80,7 +80,7 @@ const Register = (props) => {
                                         <label className="form-label">First Name</label>
                                         <input 
                                             type="text" 
-                                            className={"form-control "+(!formError.validFname ? "is-invalid" : "")} 
+                                            className={"form-control "+(formError.validFname ? "is-invalid" : "")} 
                                             name="firstname"
                                             onChange={changeInfo}
                                         />
