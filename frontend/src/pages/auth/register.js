@@ -1,14 +1,29 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerAction } from '../../store/actions/authActions';
 
 
 const Register = (props) => {
 
-    const [userInfo, setUserInfo] = useState({firstname: '', lastname: ''});
-    const [submitForm, setSubmitForm] = useState(false);
+    const dispatch = useDispatch();
+
+    const state = useSelector(state => state.userRegister);
+
+    const { loading, message } = state;
+
+    const [userInfo, setUserInfo] = useState({});
+    const [disableBtn, setDisableBtn] = useState(false);
     const [formError, setFormError] = useState({validEmail: false, validFname: false, validLname: false, validPassword: false});
 
+    // useEffect(() => {
+    //     if(message && message.type === 'success'){
+    //         setTimeout(() => {
+    //             props.loginPage();
+    //         }, 3000);
+    //     }
+    // }, [state]);
 
-    const changeInfo = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setUserInfo({...userInfo, [name] : value});
         validateForm(name, value);
@@ -17,51 +32,46 @@ const Register = (props) => {
     const validateForm = (name, value) => {
         const regEmail = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const regPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,15}$/;
-        const validFname = (userInfo.firstname && userInfo.firstname.length >= 3) || false;
-        const validLname = (userInfo.firstname && userInfo.lastname.length >= 3) || false;
-        console.log(validFname);
-        let errors = { validFname: validFname, validLname: validLname };
-        console.log(errors);
-        // switch (name) {
-        //     case 'email':
-        //         if(!regEmail.test(value)){
-        //             errors.validEmail = true
-        //         }else{
-        //             errors.validEmail = false
-        //         }
-        //         break;
-        //     case 'firstname':
-        //         if(value === ''){
-        //             errors.validFname = true
-        //         }else{
-        //             errors.validFname = false
-        //         }
-        //         break;
-        //     case 'lastname':
-        //         if(value === ''){
-        //             errors.validLname = true
-        //         }else{
-        //             errors.validLname = false
-        //         }
-        //         break;
-        //     case 'password':
-        //         if(!regPassword.test(value)){
-        //             errors.validPassword = true
-        //         }else{
-        //             errors.validPassword = false
-        //         }
-        //         break;
-        //     default:
-        //         break;
-        // }
-        setFormError({...formError, ...errors });
+        const reqletter = /[^a-zA-Z]/;
+        let errors = {...formError};
+
+        switch (name) {
+            case 'email':
+                errors.validEmail = regEmail.test(value);
+                break;
+            case 'firstname':
+                errors.validFname = value.length >= 3 && !reqletter.test(value);
+                break;
+            case 'lastname':
+                errors.validLname = value.length >= 3 && !reqletter.test(value);
+                break;
+            case 'password':
+                errors.validPassword = regPassword.test(value);
+                break;
+            default:
+                break;
+        }
+        setFormError({...formError, ...errors});
+        setDisableBtn((errors.validEmail && errors.validFname && errors.validPassword && errors.validLname) || false);
     };
+
+
 
     const registerUser = (e) => {
         e.preventDefault();
-        console.log(userInfo);
 
-        setSubmitForm(true);
+        const userDetails = {
+            firstname: userInfo.firstname,
+            lastname: userInfo.lastname,
+            emailaddress: userInfo.email,
+            password: userInfo.password
+        };
+
+        dispatch(registerAction(userDetails));
+    };
+
+    const handleValidInput = (input, value) => {
+        return "form-control " +(input?  "is-valid" : input === false && value ? "is-invalid" : "");
     };
 
     return(
@@ -80,9 +90,9 @@ const Register = (props) => {
                                         <label className="form-label">First Name</label>
                                         <input 
                                             type="text" 
-                                            className={"form-control "+(formError.validFname ? "is-invalid" : "")} 
+                                            className={handleValidInput(formError.validFname, userInfo.firstname)} 
                                             name="firstname"
-                                            onChange={changeInfo}
+                                            onChange={handleChange}
                                         />
                                         <div className="invalid-feedback">
                                             Please provide first name.
@@ -92,9 +102,9 @@ const Register = (props) => {
                                         <label className="form-label">Last Name</label>
                                         <input 
                                             type="text" 
-                                            className={"form-control "+(formError.validLname ? "is-invalid" : "")}
+                                            className={handleValidInput(formError.validLname, userInfo.lastname)}
                                             name="lastname"
-                                            onChange={changeInfo}
+                                            onChange={handleChange}
                                         />
                                         <div className="invalid-feedback">
                                             Please provide last name.
@@ -105,9 +115,9 @@ const Register = (props) => {
                                     <label  className="form-label">Email address</label>
                                     <input 
                                         type="email" 
-                                        className={"form-control " +(formError.validEmail ? "is-invalid" : "")}
+                                        className={handleValidInput(formError.validEmail, userInfo.email)}
                                         name="email"
-                                        onChange={changeInfo}
+                                        onChange={handleChange}
                                      />
                                      <div className="invalid-feedback">
                                         Please provide a valid email address.
@@ -117,19 +127,19 @@ const Register = (props) => {
                                     <label  className="form-label">Password</label>
                                     <input 
                                         type="password" 
-                                        className={"form-control "+(formError.validPassword ? "is-invalid" : "")}
+                                        className={handleValidInput(formError.validPassword, userInfo.password)}
                                         name="password"
-                                        onChange={changeInfo}
+                                        onChange={handleChange}
                                     />
                                     <div className="invalid-feedback">
-                                        Please provide a valid password.
+                                        Password should contain atleast one number, uppercase, and must be atleast 5 characters
                                     </div>
                                 </div>
                                 <div className="d-grid gap-2">
                                     <button type="submit" className="btn btn-primary"
-                                    // disabled={!formError.validForm}
+                                    disabled={!disableBtn}
                                     >
-                                       {submitForm ? <i className="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i> : <> <i className="fa fa-lock" aria-hidden="true"></i> Register </>} 
+                                       {loading ? <i className="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i> : <> <i className="fa fa-lock" aria-hidden="true"></i> Register </>} 
                                     </button>
                                 </div>
                             </form>
