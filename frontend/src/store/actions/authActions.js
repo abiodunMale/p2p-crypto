@@ -1,7 +1,47 @@
 import axios from 'axios';
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT_REQUEST, USER_LOGOUT_SUCCESS, USER_LOGOUT_FAIL } from '../actionTypes';
+import {  
+    USER_REGISTER_FAIL, 
+    USER_REGISTER_REQUEST, 
+    USER_REGISTER_SUCCESS, 
+    USER_LOGIN_FAIL, 
+    USER_LOGIN_REQUEST, 
+    USER_LOGIN_SUCCESS, 
+    USER_LOGOUT_REQUEST, 
+    USER_LOGOUT_SUCCESS, 
+    USER_LOGOUT_FAIL 
+} from '../actionTypes';
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+
+const registerAction = (user) => {
+    return async dispatch => {
+        try {
+
+            dispatch({
+                type: USER_REGISTER_REQUEST
+            });
+
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            const { data } = await axios.post('api/auth/register', user, config);
+
+            dispatch({
+                type: USER_REGISTER_SUCCESS,
+                payload: data
+            })
+            
+        } catch (error) {
+            dispatch({
+                type: USER_REGISTER_FAIL,
+                payload: error.response && error.response.data.message
+            });
+        }
+    };
+};
 
 const loginUserAction = (loginData) => {
     return async (dispatch) => {
@@ -28,11 +68,12 @@ const loginUserAction = (loginData) => {
             localStorage.setItem('userAuthData', JSON.stringify(data.user.token))
         } 
         catch (error) {
+            toast.error("hhugugu");
+
             dispatch({
                 type: USER_LOGIN_FAIL,
                 payload: error.response && error.response.data.message,
             });
-            toast.error(`🦄 ${error.response && error.response.data.message}`);
         }
     };
 };
@@ -60,4 +101,4 @@ const logoutUserAction = () => {
     };
 };
 
-export {loginUserAction, logoutUserAction};
+export {loginUserAction, logoutUserAction, registerAction};

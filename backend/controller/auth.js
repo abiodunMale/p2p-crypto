@@ -14,7 +14,7 @@ exports.Register = async (req, res) => {
 
         const newUser = new userModel(user);
         await newUser.save();
-        return res.status(200).json({message: 'Account Created Successfully', user: newUser});
+        return res.status(200).json({message: 'Account Created Successfully'});
         
     } catch (error) {
         return res.status(500).json({message: 'An Error Occured '+error})

@@ -1,4 +1,38 @@
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT_REQUEST, USER_LOGOUT_SUCCESS, USER_LOGOUT_FAIL } from "../actionTypes";
+import { USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT_REQUEST, USER_LOGOUT_SUCCESS, USER_LOGOUT_FAIL } from "../actionTypes";
+
+const initialState = {
+    loading: false,
+    message: {},
+};
+
+const registerReducer = (state = initialState , action) => {
+    switch (action.type) {
+        case USER_REGISTER_REQUEST:
+            return {
+                ...state, loading: true
+            }
+        case USER_REGISTER_SUCCESS: 
+            return {
+                ...state,
+                loading: false,
+                message: {
+                    type: 'success',
+                    content: action.payload.message
+                }
+            }
+        case USER_REGISTER_FAIL: 
+            return {
+                ...state,
+                loading: false,
+                message: {
+                    type: 'fail',
+                    content: action.payload
+                }
+            }
+        default:
+            return state;
+    }
+};
 
 const loginUserReducer = (state= {}, action) => {
 
@@ -10,18 +44,15 @@ const loginUserReducer = (state= {}, action) => {
         case USER_LOGIN_SUCCESS:
             return {
                 token: action.payload.user.token,
-                userInfo: action.payload.user,
+                userInfo: action.payload.user
             };
         case USER_LOGIN_FAIL:
             return {
-                loading: false,
                 message: {
                     type: 'fail',
                     content: action.payload
-                }, 
-                // we are already using toastify in the action, so no need to pass meaage to the state any more
+                }
             };
-
         case USER_LOGOUT_REQUEST:
             return {
                 loading: true,
@@ -34,13 +65,12 @@ const loginUserReducer = (state= {}, action) => {
                 loading: false,
                 message: {
                     type: 'fail',
-                    title: 'Error',
                     content: 'Error While Logging Out'
-                },
+                }
             };
         default:
             return state;
     }
 };
 
-export {loginUserReducer};
+export {loginUserReducer, registerReducer};
