@@ -7,14 +7,14 @@ import { loginUserReducer } from './reducers/authReducer';
 const middleware = [thunk];
 
 const reducer = combineReducers({
-    userLogin: loginUserReducer,
+    userAuth: loginUserReducer,
 });
 
 // Get user from localstorage and save it into our store
 const userAuthFromStorage = localStorage.getItem('userAuthData') ? JSON.parse(localStorage.getItem('userAuthData')) : null;
 
 const initialState = {
-    userLogin: { token: userAuthFromStorage },
+    userAuth: { token: userAuthFromStorage },
 }
 
 const store = createStore(

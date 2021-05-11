@@ -3,13 +3,17 @@ import SideMenu from './components/sidemenu';
 import Auth from './pages/auth';
 import Demo from './pages/demo';
 import Navbar from './components/navbar';
+import { useSelector } from 'react-redux';
 
 
 const App = () => {
+
+  const  userLogin = useSelector(state => state.userAuth);
+  const {token} = userLogin;
   return (
     <>
     <BrowserRouter>
-    {false ? 
+    {token ? 
     <>
       <SideMenu/>
       <Navbar/>

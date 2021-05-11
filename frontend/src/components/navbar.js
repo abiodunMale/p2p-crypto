@@ -1,4 +1,16 @@
+import { useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { logoutUserAction } from "../store/actions/authActions";
+
 const Navbar = () => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const logoutHandler = () => {
+        dispatch(logoutUserAction());
+        history.push('/');
+    };
+
     return (
         <div className='page-content'>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -12,7 +24,7 @@ const Navbar = () => {
                                     <a className="nav-link" href="#">Profile</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+                                    <button className="nav-link" onClick={logoutHandler}><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
                                 </li>
                             </ul>
                         </div>
