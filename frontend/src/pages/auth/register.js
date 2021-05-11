@@ -33,7 +33,7 @@ const Register = (props) => {
         const regEmail = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const regPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,15}$/;
         const reqletter = /[^a-zA-Z]/;
-        let errors = {...formError};
+        let errors = formError;
 
         switch (name) {
             case 'email':
@@ -51,7 +51,7 @@ const Register = (props) => {
             default:
                 break;
         }
-        setFormError({...formError, ...errors});
+        setFormError({...formError, errors});
         setDisableBtn((errors.validEmail && errors.validFname && errors.validPassword && errors.validLname) || false);
     };
 
@@ -71,7 +71,7 @@ const Register = (props) => {
     };
 
     const handleValidInput = (input, value) => {
-        return "form-control " +(input?  "is-valid" : input === false && value ? "is-invalid" : "");
+        return "form-control " +(input ? "is-valid" : input === false && value ? "is-invalid" : "");
     };
 
     return(
